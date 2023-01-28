@@ -10,7 +10,7 @@ app.use(express.json());
 
 
 app.get("/", (req, res) => {
-  res.status(200).send("hello World");
+  res.status(200).send("Working Fine");
 });
 
 
@@ -18,21 +18,21 @@ app.get("/quizdata", async(req, res) => {
         const data = await QuizModel.find()
         res.send(data)
   try{
-  
-  } catch (e) {}
-});
-
-app.get("/category", async(req, res) => {
-        const data = await QuizModel.find()
-        res.send(data)
-  try{
-  
-  } catch (e) {}
+  } catch (e) {
+    return res.status(500).send(e.message)
+  }
 });
 
 
-
-
+  app.get("/getquestion",async(req,res)=>{
+   try{
+    const {category,question,difficulty} = req.query
+    const data =await QuizModel.find({difficulty:difficulty,category:category}).skip(question-1).limit(1);
+   return res.send(data)
+   }catch(e){
+     return res.status(500).send(e.message)
+   }
+})
 
 
 app.listen(PORT, async () => {
